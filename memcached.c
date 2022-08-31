@@ -6433,18 +6433,6 @@ static void sig_handler(const int sig) {
     exit(EXIT_SUCCESS);
 }
 
-#ifndef HAVE_SIGIGNORE
-static int sigignore(int sig) {
-    struct sigaction sa = { .sa_handler = SIG_IGN, .sa_flags = 0 };
-
-    if (sigemptyset(&sa.sa_mask) == -1 || sigaction(sig, &sa, 0) == -1) {
-        return -1;
-    }
-    return 0;
-}
-#endif
-
-
 /*
  * On systems that supports multiple page sizes we may reduce the
  * number of TLB-misses by using the biggest available page size
@@ -7611,7 +7599,7 @@ int main (int argc, char **argv) {
     /* daemonize if requested */
     /* if we want to ensure our ability to dump core, don't chdir to / */
     if (do_daemonize) {
-        if (sigignore(SIGHUP) == -1) {
+        if (signal(SIGHUP, SIG_IGN) == SIG_ERR) {
             perror("Failed to ignore SIGHUP");
         }
         if (daemonize(maxcore, settings.verbose) == -1) {
@@ -7684,7 +7672,7 @@ int main (int argc, char **argv) {
      * ignore SIGPIPE signals; we can use errno == EPIPE if we
      * need that information
      */
-    if (sigignore(SIGPIPE) == -1) {
+    if (signal(SIGHUP, SIG_IGN) == SIG_ERR) {
         perror("failed to ignore SIGPIPE; sigaction");
         exit(EX_OSERR);
     }

@@ -517,7 +517,6 @@ fi
 AC_CHECK_FUNCS(mlockall)
 AC_CHECK_FUNCS(getpagesizes)
 AC_CHECK_FUNCS(memcntl)
-AC_CHECK_FUNCS(sigignore)
 AC_CHECK_FUNCS(clock_gettime)
 AC_CHECK_FUNCS([accept4], [AC_DEFINE(HAVE_ACCEPT4, 1, [Define to 1 if support accept4])])
 AC_CHECK_FUNCS([getopt_long], [AC_DEFINE(HAVE_GETOPT_LONG, 1, [Define to 1 if support getopt_long])])
@@ -659,7 +658,7 @@ if test "$ICC" = "yes"
 then
    dnl ICC trying to be gcc.
    CFLAGS="$CFLAGS -diag-disable 187 -Wall -Werror"
-   AC_DEFINE([_GNU_SOURCE],[1],[find sigignore on Linux])
+   AC_DEFINE([_GNU_SOURCE],[1],[make sure IOV_MAX is defined])
 elif test "$GCC" = "yes"
 then
   GCC_VERSION=`$CC -dumpversion`
@@ -669,7 +668,7 @@ then
     CFLAGS="$CFLAGS -fno-strict-aliasing"
     ;;
   esac
-  AC_DEFINE([_GNU_SOURCE],[1],[find sigignore on Linux])
+  AC_DEFINE([_GNU_SOURCE],[1],[make sure IOV_MAX is defined])
 elif test "$SUNCC" = "yes"
 then
   CFLAGS="$CFLAGS -errfmt=error -errwarn -errshort=tags"
